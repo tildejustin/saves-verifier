@@ -1,0 +1,3 @@
+[submodule "loader_versioning"]
+	path = loader_versioning
+	url = https://github.com/tildejustin/loader_versioning
