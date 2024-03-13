@@ -2,8 +2,6 @@ import datetime
 import json
 from pathlib import Path
 
-from semver import Version
-
 from util import normalize_time
 
 

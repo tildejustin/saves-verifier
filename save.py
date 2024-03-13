@@ -1,3 +1,4 @@
+import json
 import os
 from datetime import timedelta, datetime
 from pathlib import Path
@@ -11,9 +12,6 @@ from SpeedrunIGTInfo import SpeedrunIGTInfo
 from gamerules import Gamerule, gamerules
 from seed_utils import is_random
 from util import normalize_time
-
-
-# from gamerules import gamerules, GameRule
 
 
 class WorldSave:
@@ -32,8 +30,10 @@ class WorldSave:
     dragon_killed: bool
     dragon_ever_killed: bool
     dragon_death_count: int
+    generator_options: str = ""
     players: dict[str, str]
     gamerules: list[Gamerule]
+    advancements: list[str] = None
     speedrunigt_data: SpeedrunIGTInfo
 
     def __init__(self, save_folder: Path):
@@ -83,6 +83,11 @@ class WorldSave:
         speedrunigt_folder = save_folder.joinpath("speedrunigt")
         if speedrunigt_folder.exists():
             self.speedrunigt_data = self.parse_speedrunigt(speedrunigt_folder)
+        advancements_folder = save_folder.joinpath("advancements")
+        advancements_files = os.listdir(advancements_folder)
+        if len(advancements_files) == 1:
+            with open(os.path.join(save_folder.joinpath("advancements"), advancements_files[0])) as f:
+                self.advancements = list(filter(lambda s: not s.startswith("minecraft:recipe") and "/" in s, json.load(f)))
 
     @staticmethod
     def yes_no(t: Any):
@@ -113,7 +118,8 @@ class WorldSave:
         result += "players: " + "\n".join([f"{name}, {uuid}" for uuid, name in self.players.items()]) + "\n"
         result += f"modded: {self.yes_no(self.modded)}, client: {self.client if self.client is not None else 'unknown'}\n"
         result += "gamerules: " + self.get_gamerule_text()
-
+        if self.advancements is not None:
+            result += "advancement count: " + str(len(self.advancements))
         # TODO: add the rest of the set vars in the big case statement
         return result
 
@@ -165,7 +171,7 @@ class WorldSave:
                 gamerule_text += str(rule) + " not in current ruleset\n"
         if not gamerule_text:
             gamerule_text = "all normal"
-        return gamerule_text  + "\n"
+        return gamerule_text + "\n"
 
 #     def __str__(self):
 #         correct_rules = gamerules(self.game_version)

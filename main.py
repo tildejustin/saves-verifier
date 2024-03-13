@@ -37,7 +37,11 @@ def main():
     for save_folder in args.save_folder:
         if advancements_only:
             with open(save_folder) as f:
-                print(len(list(filter(lambda s: not s.startswith("minecraft:recipe"), json.load(f)))))
+                advancements = list(filter(lambda s: not s.startswith("minecraft:recipe") and "/" in s, json.load(f)))
+                if verbose:
+                    for advancement in advancements:
+                        print(advancement.replace("minecraft:", ""))
+                print(len(advancements))
             continue
         save = WorldSave(save_folder)
         text = str(save)
