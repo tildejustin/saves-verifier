@@ -1,3 +1,4 @@
+import os.path
 from dataclasses import dataclass
 from subprocess import Popen, DEVNULL
 from time import sleep
@@ -6,7 +7,8 @@ from typing import Any, Optional
 from py4j.java_gateway import JavaGateway
 from semver import Version
 
-process = Popen(["java", "-jar", "loader_versioning-1.0.jar"], shell=False, stdout=DEVNULL, stderr=DEVNULL)
+folder = "loader_versioning/build/libs"
+process = Popen(["java", "-jar", os.path.join(folder, os.listdir(folder)[0])], shell=False, stdout=DEVNULL, stderr=DEVNULL)
 # let the jvm start up
 sleep(.2)
 
@@ -90,7 +92,8 @@ try:
         GameRule("maxCommandForkCount", "65536", parse("23w41a")),
         GameRule("projectilesCanBreakBlocks", "True", parse("23w42a")),
         GameRule("playersNetherPortalDefaultDelay", "80", parse("23w42a")),
-        GameRule("playersNetherPortalCreativeDelay", "1", parse("23w42a"))
+        GameRule("playersNetherPortalCreativeDelay", "1", parse("23w42a")),
+        GameRule("spawnChunkRadius", "2", parse("24w03a"))
     ]
 finally:
     # if the process isn't killed, bad things happen
@@ -98,4 +101,4 @@ finally:
 
 for rule in rules:
     quote = "\""
-    print(f'GameRule("{rule.name}", "{rule.default_value}", "{str(rule.minimum_version)}"{", " + quote + str(rule.maximum_version) if rule.maximum_version is not None else ""}"),')
+    print(f'Gamerule("{rule.name}", "{rule.default_value}", "{str(rule.minimum_version)}"{", " + quote + str(rule.maximum_version) + quote if rule.maximum_version is not None else ""}),')

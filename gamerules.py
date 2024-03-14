@@ -40,13 +40,13 @@ def gamerules(version: Version) -> list[Gamerule]:
 # source for versions: https://minecraft.wiki/w/Game_rule
 # generated from Fabric Loader, see gamerules_codegen.py and loader_versioning submodule
 rules = [
-    Gamerule("doFireTick", "true", "1.4.2-alpha.12.32.a"),
-    Gamerule("mobGriefing", "true", "1.4.2-alpha.12.32.a"),
-    Gamerule("keepInventory", "false", "1.4.2-alpha.12.32.a"),
-    Gamerule("doMobSpawning", "true", "1.4.2-alpha.12.32.a"),
-    Gamerule("doMobLoot", "true", "1.4.2-alpha.12.32.a"),
-    Gamerule("doTileDrops", "true", "1.4.2-alpha.12.32.a"),
-    Gamerule("commandBlockOutput", "true", "1.4.2-alpha.12.38.a"),
+    Gamerule("doFireTick", "true", "1.4.0-alpha.12.32.a"),
+    Gamerule("mobGriefing", "true", "1.4.0-alpha.12.32.a"),
+    Gamerule("keepInventory", "false", "1.4.0-alpha.12.32.a"),
+    Gamerule("doMobSpawning", "true", "1.4.0-alpha.12.32.a"),
+    Gamerule("doMobLoot", "true", "1.4.0-alpha.12.32.a"),
+    Gamerule("doTileDrops", "true", "1.4.0-alpha.12.32.a"),
+    Gamerule("commandBlockOutput", "true", "1.4.0-alpha.12.38.a"),
     Gamerule("naturalRegeneration", "true", "1.6.0-alpha.13.23.a"),
     Gamerule("doDaylightCycle", "true", "1.6.0-alpha.13.24.a"),
     Gamerule("logAdminCommands", "true", "1.8.0-alpha.14.3.a"),
@@ -90,5 +90,6 @@ rules = [
     Gamerule("maxCommandForkCount", "65536", "1.20.3-alpha.23.41.a"),
     Gamerule("projectilesCanBreakBlocks", "True", "1.20.3-alpha.23.42.a"),
     Gamerule("playersNetherPortalDefaultDelay", "80", "1.20.3-alpha.23.42.a"),
-    Gamerule("playersNetherPortalCreativeDelay", "1", "1.20.3-alpha.23.42.a")
+    Gamerule("playersNetherPortalCreativeDelay", "1", "1.20.3-alpha.23.42.a"),
+    Gamerule("spawnChunkRadius", "2", "1.20.5-alpha.24.3.a")
 ]
