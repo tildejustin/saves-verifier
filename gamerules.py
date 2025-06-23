@@ -88,7 +88,7 @@ rules = [
     Gamerule("doVinesSpread", "true", "1.19.4-alpha.23.6.a"),
     Gamerule("enderPearlsVanishOnDeath", "true", "1.20.2-beta.1"),
     Gamerule("maxCommandForkCount", "65536", "1.20.3-alpha.23.41.a"),
-    Gamerule("projectilesCanBreakBlocks", "True", "1.20.3-alpha.23.42.a"),
+    Gamerule("projectilesCanBreakBlocks", "true", "1.20.3-alpha.23.42.a"),
     Gamerule("playersNetherPortalDefaultDelay", "80", "1.20.3-alpha.23.42.a"),
     Gamerule("playersNetherPortalCreativeDelay", "1", "1.20.3-alpha.23.42.a"),
     Gamerule("spawnChunkRadius", "2", "1.20.5-alpha.24.3.a")

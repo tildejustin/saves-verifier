@@ -90,7 +90,7 @@ try:
         GameRule("doVinesSpread", "true", parse("23w06a")),
         GameRule("enderPearlsVanishOnDeath", "true", parse("1.20.2-pre1")),
         GameRule("maxCommandForkCount", "65536", parse("23w41a")),
-        GameRule("projectilesCanBreakBlocks", "True", parse("23w42a")),
+        GameRule("projectilesCanBreakBlocks", "true", parse("23w42a")),
         GameRule("playersNetherPortalDefaultDelay", "80", parse("23w42a")),
         GameRule("playersNetherPortalCreativeDelay", "1", parse("23w42a")),
         GameRule("spawnChunkRadius", "2", parse("24w03a"))
