@@ -27,6 +27,7 @@ class WorldSave:
     bonus_chest: Optional[bool] = None
     cheats: bool
     modded: bool
+    difficulty: str
     dragon_killed: bool
     dragon_ever_killed: bool
     dragon_death_count: int
@@ -34,7 +35,7 @@ class WorldSave:
     players: dict[str, str]
     gamerules: list[Gamerule]
     advancements: list[str] = None
-    speedrunigt_data: SpeedrunIGTInfo
+    speedrunigt_data: SpeedrunIGTInfo = None
 
     def __init__(self, save_folder: Path):
         level_data: nbtlib.Compound = nbtlib.load(save_folder.joinpath("level.dat")).get("Data")
@@ -46,7 +47,7 @@ class WorldSave:
                 case "ServerBrands":
                     self.client = value[0]
                 case "Version":
-                    self.game_version = value.get("Name")
+                    self.game_version = Version.parse(value.get("Name"), True)
                 case "Time":
                     self.ticks = int(value)
                     self.time_played = normalize_time(str(timedelta(seconds=value / 20)))
@@ -78,16 +79,27 @@ class WorldSave:
                     self.datapacks = value.get("Enabled")
                 case "GameRules":
                     self.gamerules = [Gamerule(rule_name, rule_value) for rule_name, rule_value in value.items()]
+                case "Difficulty":
+                    diffs = {
+                        -1: "negative peaceful (1.6-)",
+                        0: "peaceful",
+                        1: "easy",
+                        2: "normal",
+                        3: "hard"
+                    }
+                    self.difficulty = diffs.get(value)
 
         self.players = self.parse_players(save_folder)
         speedrunigt_folder = save_folder.joinpath("speedrunigt")
         if speedrunigt_folder.exists():
             self.speedrunigt_data = self.parse_speedrunigt(speedrunigt_folder)
         advancements_folder = save_folder.joinpath("advancements")
-        advancements_files = os.listdir(advancements_folder)
-        if len(advancements_files) == 1:
-            with open(os.path.join(save_folder.joinpath("advancements"), advancements_files[0])) as f:
-                self.advancements = list(filter(lambda s: not s.startswith("minecraft:recipe") and "/" in s, json.load(f)))
+        if os.path.exists(advancements_folder):
+            advancements_files = os.listdir(advancements_folder)
+            self.advancements = set()
+            for f in advancements_files:
+                with open(os.path.join(save_folder.joinpath("advancements"), f)) as f:
+                    self.advancements.update(filter(lambda s: not s.startswith("minecraft:recipe") and "/" in s, json.load(f)))
 
     @staticmethod
     def yes_no(t: Any):
@@ -102,7 +114,7 @@ class WorldSave:
         result += f"seed: {str(self.seed)}"
         if not is_random(self.seed):
             result += ", not random"
-        result += f", structures: {self.yes_no(self.structures)}, cheats: {self.yes_no(self.cheats)}, hardcore: {self.yes_no(self.hardcore)}{self.generator_options}"
+        result += f"\ndifficulty: {self.difficulty}, structures: {self.yes_no(self.structures)}, cheats: {self.yes_no(self.cheats)}, hardcore: {self.yes_no(self.hardcore)}{self.generator_options}"
         if self.bonus_chest is not None:
             result += ", bonus chest: " + self.yes_no(self.bonus_chest)
         result += "\n"
@@ -142,7 +154,7 @@ class WorldSave:
     @staticmethod
     def get_player_name(uuid: str) -> str:
         try:
-            name = requests.get("https://api.mojang.com/user/profile/" + uuid).json().get("name")
+            name = requests.get("https://api.minecraftservices.com/minecraft/profile/lookup/" + uuid).json().get("name")
             return "unknown uuid" if name is None else name
         except requests.ConnectionError:
             return "http error"
