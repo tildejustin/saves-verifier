@@ -99,7 +99,8 @@ class WorldSave:
             self.advancements = set()
             for f in advancements_files:
                 with open(os.path.join(save_folder.joinpath("advancements"), f)) as f:
-                    self.advancements.update(filter(lambda s: not s.startswith("minecraft:recipe") and "/" in s, json.load(f)))
+                    data = json.load(f)
+                    self.advancements.update(filter(lambda s: not s.startswith("minecraft:recipe") and "/" in s and data[s]["done"] == True, data))
 
     @staticmethod
     def yes_no(t: Any):
